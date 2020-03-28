@@ -21,6 +21,7 @@ class Newspage extends Component {
   componentDidUpdate(prevProps) {
     if (prevProps.activePage !== this.props.activePage || prevProps.startDate !== this.props.startDate) {
       this.setState({loading: true, news: [], mainPage: '', hdc: ''});
+      this.myRef = React.createRef();
       this.fetchData();
     }
   }
@@ -62,10 +63,12 @@ class Newspage extends Component {
   myInit() {
     // get the target image
     var img = this.myRef.current;
+    console.log(img);
 
     let {x, y} = img.getBoundingClientRect()
     let w = img.clientWidth;
     let h = img.clientHeight;
+    console.log(x,y,w,h);
 
     // move the canvas, so it's contained by the same parent as the image
     var imgParent = img.parentNode;
