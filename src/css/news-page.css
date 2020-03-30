@@ -2,3 +2,12 @@ canvas {
     pointer-events: none;
     position: absolute;
 }
+
+.news {
+    opacity: 0;
+}
+
+.news:hover {
+    fill: #999;
+    opacity: 0.2;
+}

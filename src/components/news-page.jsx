@@ -27,12 +27,11 @@ class Newspage extends Component {
   }
 
   fetchData() {
-    fetch(`http://localhost:8081/main/${this.formatDate(this.props.startDate)}/${this.props.activePage}`)
+    fetch(`http://localhost:8080/news/${this.formatDate(this.props.startDate)}/${this.props.activePage}`)
     .then(res => res.json())
     .then(({code, news, mainPage}) => {
       if(code === 200){
         this.setState({ news, mainPage, loading: false });
-        this.myInit();
       } else {
         this.setState({loading: false});
       }
@@ -44,58 +43,6 @@ class Newspage extends Component {
     return `${date.getFullYear()}-${date.getMonth()+1}-${date.getDate()}`;
   }
 
-  myLeave() {
-    var canvas = document.getElementById('myCanvas');
-    this.state.hdc.clearRect(0, 0, canvas.width, canvas.height);
-  }
-
-  drawRect(e, coOrdStr) {
-    console.log(`coords: ${coOrdStr}`);
-    var mCoords = coOrdStr.split(',');
-    var top, left, bot, right;
-    left = mCoords[0];
-    top = mCoords[1];
-    right = mCoords[2];
-    bot = mCoords[3];
-    this.state.hdc.strokeRect(left,top,right-left,bot-top); 
-  }
-
-  myInit() {
-    // get the target image
-    var img = this.myRef.current;
-    console.log(img);
-
-    let {x, y} = img.getBoundingClientRect()
-    let w = img.clientWidth;
-    let h = img.clientHeight;
-    console.log(x,y,w,h);
-
-    // move the canvas, so it's contained by the same parent as the image
-    var imgParent = img.parentNode;
-    var can = document.getElementById('myCanvas');
-    imgParent.appendChild(can);
-
-    // place the canvas in front of the image
-    can.style.zIndex = 1;
-
-    // position it over the image
-    can.style.left = x+'px';
-    can.style.top = y+'px';
-
-    // make same size as the image
-    can.setAttribute('width', w+'px');
-    can.setAttribute('height', h+'px');
-
-    // get it's context
-    let context = can.getContext('2d');
-
-    // set the 'default' values for the colour/width of fill/stroke operations
-    context.fillStyle = 'red';
-    context.strokeStyle = 'red';
-    context.lineWidth = 2;
-    this.setState({hdc: context});
-  }
-
   render() { 
     if(this.state.loading) {
       return <div>loading...</div>;
@@ -104,15 +51,25 @@ class Newspage extends Component {
     }
     return (
       <div>
-        <canvas id='myCanvas'></canvas>
+        {/* <canvas id='myCanvas'></canvas>
         <img ref={this.myRef} className='mw-100' src={this.state.mainPage} alt="Workplace" useMap="#workmap"/>
 
         <map name="workmap">
-          {/* <area id="area1" key={this.state.news[0].id} shape="rect" target="_blank" coords="206,192,1095,850" alt="Computer" href={this.state.news[0].link}/> */}
           {this.state.news.map(snippet => (
             <area key={snippet.id} shape="rect" target="_blank" onMouseOver={e => this.drawRect(e, snippet.coordinates)} onMouseOut={e => this.myLeave(e)} coords={snippet.coordinates} alt="Computer" href={snippet.link}/>
           ))}
-        </map>
+        </map> */}
+        <svg version="1.1" xmlns="http://www.w3.org/2000/svg" xmlnsXlink="http://www.w3.org/1999/xlink"
+          viewBox="0 0 1142 1800" preserveAspectRatio="xMinYMin meet">
+          <image width="1142" height="1800" xlinkHref={this.state.mainPage}>
+          </image>
+          {/* <a xlinkHref="//burjkhalifa.ae/en/" target="_blank">
+            <rect className="news" x="1.54%" y="11.91%" width="11.25%" height="16.72%" />
+          </a>
+          <a xlinkHref="//burjkhalifa.ae/en/" target="_blank">
+            <rect className="news" x="1.58%" y="28.77%" width="11.32%" height="13.14%" />
+          </a> */}
+        </svg>
       </div>
     );
   }

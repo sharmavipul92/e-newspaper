@@ -23,9 +23,9 @@ class Pagination1 extends Component {
   getPaginatedList(){
     const selectedDate = this.parseDate();
     let items = [];
-    for (let number = 1; number <= this.props.numberOfPages; number++) {
+    for (let number = 1; number <= this.props.numberOfPages.total; number++) {
       items.push(
-        <LinkContainer to={`/${selectedDate}/${number}`} key={number} onClick={() => this.props.handleChange(number)}>
+        <LinkContainer to={`/${selectedDate}/${number}`} key={number} onClick={() => this.props.onPageChange(number)}>
           <Pagination.Item key={number} active={number === this.props.activePage}>
             {number}
           </Pagination.Item>

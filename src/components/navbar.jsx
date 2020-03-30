@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Navbar, Nav, Container } from 'react-bootstrap';
+import { Navbar, Container } from 'react-bootstrap';
 
 class Navbar1 extends Component {
   state = {  }
@@ -7,7 +7,7 @@ class Navbar1 extends Component {
     return (
       <Navbar collapseOnSelect expand="lg" bg="dark" variant="dark">
         <Container>
-          <Navbar.Brand>Seema Sandesh e-newspaper</Navbar.Brand>
+          <Navbar.Brand>Seema Sandesh E-paper</Navbar.Brand>
           {/* <Navbar.Toggle aria-controls="basic-navbar-nav" />
           <Navbar.Collapse id="basic-navbar-nav">
             <Nav className="mr-auto">

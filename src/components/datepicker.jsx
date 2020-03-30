@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
-import DatePicker from "react-datepicker";
- 
+import DatePicker from "react-datepicker"; 
 import "react-datepicker/dist/react-datepicker.css";
+import '../css/datepicker.css';
 
 class Datepicker extends Component {
   state = {};
@@ -11,6 +11,8 @@ class Datepicker extends Component {
       <DatePicker
         selected={this.props.startDate}
         onChange={(date) => this.props.handleChange(date)}
+        maxDate={new Date()}
+        popperPlacement="bottom-end"
       />
     );
   }

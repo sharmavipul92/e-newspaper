@@ -1,10 +1,11 @@
 import React, { Component } from 'react';
-import './App.css';
+import './css/App.css';
 import Navbar1 from './components/navbar';
 import Pagination1 from './components/pagination';
 import Newspage from './components/news-page';
 import { Container } from 'react-bootstrap';
 import Datepicker from './components/datepicker';
+// import CustomPagination from "./components/custom-pagination";
 import { HashRouter as Router } from "react-router-dom";
 class App extends Component {
 
@@ -17,38 +18,82 @@ class App extends Component {
     this.state = {
       startDate,
       activePage,
-      numberOfPages: 12,
+      numberOfPages: {
+        total: 8,
+        categories: [{
+          name: "National",
+          pages: [1,2]
+        },{
+          name: "Ganganagar",
+          pages: [3,4]
+        },{
+          name: "Jaipur",
+          pages: [5,6]
+        },{
+          name: "National",
+          pages: [7,8]
+        }],
+      },
     }
   }
 
   componentDidMount() {
-    if(this.state.activePage >= this.state.numberOfPages || this.state.activePage < 0){
+    if(this.state.activePage >= this.state.numberOfPages.total || this.state.activePage < 0){
       this.setState({activePage: 1});
       window.location.hash = `${this.formatDate(this.state.startDate)}/1`;
     }
   }
 
-  // state = {
-  //   startDate: new Date(),
-  //   numberOfPages: 12,
-  //   activePage: 1,
+  // render() { 
+  //   return (
+  //     <Router>
+  //       <Navbar1 />
+  //       <Container>
+  //         <div className="row">
+  //           <div className="col-md-9">
+  //             <Pagination1 numberOfPages={this.state.numberOfPages} startDate={this.state.startDate} activePage={this.state.activePage} handleChange={this.handlePageChange} />
+  //           </div>
+  //           <div className="col-md-3 my-auto">
+  //             <Datepicker startDate={this.state.startDate} handleChange={this.handleDateChange} />
+  //           </div>
+  //         </div>
+  //         <div className="row">
+  //           <Newspage startDate={this.state.startDate} activePage={this.state.activePage} />
+  //         </div>
+  //       </Container>
+  //     </Router>
+  //   );
   // }
 
-  render() { 
+  render() {
     return (
       <Router>
         <Navbar1 />
-        <Container>
-          <div className="row">
-            <div className="col-md-9">
-              <Pagination1 numberOfPages={this.state.numberOfPages} startDate={this.state.startDate} activePage={this.state.activePage} handleChange={this.handlePageChange} />
-            </div>
-            <div className="col-md-3 my-auto">
-              <Datepicker startDate={this.state.startDate} handleChange={this.handleDateChange} />
+        <Container className="mt-2">
+          <div className="news-header">
+            <Pagination1
+              activePage={this.state.activePage}
+              onPageChange={this.handlePageChange}
+              numberOfPages={this.state.numberOfPages}
+              startDate={this.state.startDate}
+            />
+
+            <div>
+              <Datepicker
+                startDate={this.state.startDate}
+                handleChange={this.handleDateChange}
+              />
             </div>
           </div>
-          <div className="row">
-            <Newspage startDate={this.state.startDate} activePage={this.state.activePage} />
+          <div
+            style={{
+              margin: "0rem -1rem"
+            }}
+          >
+            <Newspage
+              startDate={this.state.startDate}
+              activePage={this.state.activePage}
+            />
           </div>
         </Container>
       </Router>
@@ -66,7 +111,7 @@ class App extends Component {
   };
 
   handlePageChange = activePage => {
-    // console.log(activePage);
+    console.log(activePage);
     this.setState({
       activePage
     });
