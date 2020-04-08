@@ -9,10 +9,18 @@ class Pagination1 extends Component {
   
   render() { 
     return (
-      <Pagination className='justify-content-center mt-3'>
+      <Pagination className={this.paginationClasses()}>
         {this.getPaginatedList()}
       </Pagination>
     );
+  }
+
+  paginationClasses() {
+    let classes = 'justify-content-center mt-3';
+    if(this.props.screen === 'sm') {
+      return classes + ' pagination-sm';
+    }
+    return classes;
   }
 
   parseDate() {
@@ -25,7 +33,7 @@ class Pagination1 extends Component {
     let items = [];
     for (let number = 1; number <= this.props.numberOfPages.total; number++) {
       items.push(
-        <LinkContainer to={`/${selectedDate}/${number}`} key={number} onClick={() => this.props.onPageChange(number)}>
+        <LinkContainer to={`/${selectedDate}/${number}`} key={number} onClick={() => this.props.handlePageChange(number)}>
           <Pagination.Item key={number} active={number === this.props.activePage}>
             {number}
           </Pagination.Item>

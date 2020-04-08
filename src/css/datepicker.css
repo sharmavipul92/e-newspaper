@@ -10,19 +10,49 @@
   background-color: #fff;
   background-clip: padding-box;
   border: 1px solid #007bff;
-  border-radius: .25rem;
+  border-radius: .25rem 0rem 0rem .25rem;
   transition: border-color .15s ease-in-out,box-shadow .15s ease-in-out;
 }
 
-@media only screen and (max-width: 768px) {
+.input-group-append {
+  cursor: pointer !important;
+}
+
+.input-group-text {
+  padding: 0rem .75rem !important;
+}
+
+.input-group {
+  width: 40% !important;
+}
+
+label {
+  cursor: pointer;
+}
+
+@media only screen and (max-width: 770px) {
   .react-datepicker-wrapper input {
     padding: .375rem .25rem;
+    font-size: 0.7rem;
   }
-  .react-datepicker {
-    right: 30px
+
+  .react-datepicker-wrapper {
+    width: 70%;
   }
 
   .react-datepicker__input-container {
     padding-left: 10px;
+  }
+
+  .input-group-text {
+    padding: 0rem .25rem !important;
+  }
+
+  .input-group {
+    width: 30% !important;
+  }
+
+  label {
+    margin-bottom: auto !important;
   }
 }

@@ -8,6 +8,6 @@ canvas {
 }
 
 .news:hover {
-    fill: #999;
-    opacity: 0.2;
+    fill: rgb(0, 123, 255);
+    opacity: 0.3;
 }

@@ -6,4 +6,12 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
+  background-color: lightcyan;
+  padding: 0px 15px;
+}
+
+@media screen and (max-width: 770px) {
+  .news-header {
+    padding: 0px 5px;
+  }
 }
