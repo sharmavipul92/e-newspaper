@@ -133,11 +133,19 @@ class App extends Component {
             <Newspage
               startDate={this.state.startDate}
               activePage={this.state.activePage}
+              onCarouselPageChange={this.onCarouselPageChange}
             />
           </div>
         </Container>
       );
     }
+  }
+
+  onCarouselPageChange = (page) => {
+    console.log(page);
+    this.setState({ activePage: page+1 }, () => {
+      this.updateRoute();
+    });
   }
 
   handleDateChange = date => {

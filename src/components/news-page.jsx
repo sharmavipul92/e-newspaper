@@ -27,7 +27,7 @@ class Newspage extends Component {
   }
 
   fetchAllPages(){
-    fetch(`http://localhost:8080/news/paper/${this.formatDate(this.props.startDate)}`)
+    fetch(`/news/paper/${this.formatDate(this.props.startDate)}`)
     .then(res => res.json())
     .then(({pages}) => {
       this.setState({ pages, loading: false });
@@ -52,6 +52,8 @@ class Newspage extends Component {
         showIndicators={false}
         showStatus={false}
         selectedItem={this.props.activePage-1}
+        swipeScrollTolerance={10}
+        onChange={(e) => this.props.onCarouselPageChange(e)}
       >
       {
         Object.keys(this.state.pages).map(page => {

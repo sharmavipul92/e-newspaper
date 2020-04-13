@@ -54,7 +54,7 @@ class Navbar1 extends Component {
 
   getFile() {
     this.setState({ isDownloading: true });
-    fetch(`http://localhost:8080/download/${this.props.date}`)
+    fetch(`/download/${this.props.date}`)
     .then((response) => {
       console.log(response);
       if(response.status === 200){
