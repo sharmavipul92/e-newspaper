@@ -68,7 +68,7 @@ class Newspage extends Component {
                     if(!snippet.coordinates) return '';
                     let [x, y, width, height] = snippet.coordinates.split(',');
                     return (
-                      <Link target="_blank" key={snippet.id} to={`/${window.location.hash.substring(2)}/${snippet.id.split('/').pop().split('.')[0]}`}>
+                      <Link target="_blank" key={snippet.id} to={`/${this.props.formatDate(this.props.startDate)}/${this.props.activePage}/${snippet.id.split('/').pop().split('.')[0]}`}>
                         <rect className="news" x={x+'%'} y={y+'%'} width={width+'%'} height={height+'%'} />
                       </Link>
                     );

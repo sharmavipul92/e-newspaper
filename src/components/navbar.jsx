@@ -1,12 +1,13 @@
 import React, { Component } from 'react';
-import { Navbar, Container, Button } from 'react-bootstrap';
+import { Navbar, Container } from 'react-bootstrap';
 import { Link } from 'react-router-dom';
 import { FaDownload } from 'react-icons/fa';
 import '../css/navbar.css';
 
 class Navbar1 extends Component {
   state = {
-    isDownloading: false
+    isDownloading: false,
+    link: ''
   }
 
   render() { 
@@ -22,14 +23,16 @@ class Navbar1 extends Component {
               />
             </Link>         
           </Navbar.Brand>
-          <Button 
-            className={this.props.screen === 'sm' ? 'btn-sm' : ''}
-            variant="dark" 
-            onClick={!this.state.isDownloading ? () => this.getFile() : null}
+          <a 
+            className={this.props.screen === 'sm' ? 'btn btn-dark btn-sm' : 'btn btn-dark'}
+            href={this.state.link}
+            target={'_blank'}
+            download={`seema-sandesh-${this.props.date}.pdf`}
             disabled={this.state.isDownloading ? true : false}
+            rel="noopener noreferrer"
           >
             {this.getIcon()}
-          </Button>
+          </a>
         </Container>
       </Navbar>
     );
@@ -52,30 +55,39 @@ class Navbar1 extends Component {
     }
   }
 
+  componentDidUpdate(prev) {
+    if(this.props.date !== prev.date) {
+      // console.log('updated', this.props.date);
+      this.getFile();
+    }
+  }
+
+  componentDidMount() {
+    this.getFile();
+  }
+
   getFile() {
     this.setState({ isDownloading: true });
     fetch(`/download/${this.props.date}`)
+    .then(res => res.json())
     .then((response) => {
-      console.log(response);
-      if(response.status === 200){
-        return response.blob();
+      if(response.code === 200){
+        this.setState({ link: response.link });
+
+        // const link = document.createElement('a');
+        // link.href = response.link;
+        // link.download = `seema-sandesh-${this.props.date}.pdf`;
+        // link.target = '_blank';
+        // document.body.appendChild(link);
+        // link.click();
+        // link.parentNode.removeChild(link);
+        this.setState({ isDownloading: false });
       } else {
         throw new Error('file not found');
       }
     })
-    .then((blob) => {
-      console.log(blob);
-      const url = window.URL.createObjectURL(new Blob([blob]));
-      const link = document.createElement('a');
-      link.href = url;
-      link.setAttribute('download', `seema-sandesh-${this.props.date}.pdf`);
-      document.body.appendChild(link);
-      link.click();
-      link.parentNode.removeChild(link);
-      this.setState({ isDownloading: false });
-    })
     .catch((error) => {
-      console.log(error);
+      console.error(error);
       this.setState({ isDownloading: false });
     });
   }

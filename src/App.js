@@ -15,8 +15,9 @@ class App extends Component {
 
   constructor(props) {
     super(props);
-    const paths = window.location.hash.substring(2).split('/');
-    const startDate = (paths[0] && !isNaN(Date.parse(paths[0]))) ?  new Date(paths[0]) : new Date() ;
+    const hashValue = window.location.hash;
+    const paths = hashValue.split(/[/#]+/).filter(Boolean);
+    const startDate = (paths[0] && !isNaN(Date.parse(paths[0]))) ? new Date(paths[0]) : new Date();
     const activePage = paths[1] ? parseInt(paths[1]) : 1;
     const imageName = (paths[2] && paths[2].length > 0) ? paths[2] : undefined;
     this.state = {
@@ -81,7 +82,7 @@ class App extends Component {
       <Router>
         <Navbar1 
           resetState={this.resetState}
-          date={this.formatDate(this.state.startDate)}
+          date={(this.state.imageName) ? this.getImageIdFromName() : this.formatDate(this.state.startDate)}
           screen={this.state.screen}
         />
         { this.getContents() }
@@ -99,7 +100,12 @@ class App extends Component {
       return (
         <Container>
           <div className="news-header">
-            <div></div>
+            <Datepicker
+              startDate={this.state.startDate}
+              handleChange={this.handleDateChange}
+              screen={this.state.screen}
+              disabled={true}
+            />
             <Sharing
               imageLink={window.location.href} 
               screen={this.state.screen} 
@@ -129,27 +135,26 @@ class App extends Component {
               screen={this.state.screen} 
             />
           </div>
-          <div style={{ margin: "0rem -1rem" }}>
-            <Newspage
-              startDate={this.state.startDate}
-              activePage={this.state.activePage}
-              onCarouselPageChange={this.onCarouselPageChange}
-            />
-          </div>
+          <Newspage
+            startDate={this.state.startDate}
+            activePage={this.state.activePage}
+            onCarouselPageChange={this.onCarouselPageChange}
+            formatDate={this.formatDate}
+          />
         </Container>
       );
     }
   }
 
   onCarouselPageChange = (page) => {
-    console.log(page);
+    // console.log(page);
     this.setState({ activePage: page+1 }, () => {
       this.updateRoute();
     });
   }
 
   handleDateChange = date => {
-    console.log(date);
+    // console.log(date);
     this.setState({
       startDate: date,
       activePage: 1,
@@ -159,7 +164,7 @@ class App extends Component {
   };
 
   handlePageChange = activePage => {
-    console.log(activePage);
+    // console.log(activePage);
     this.setState({
       activePage
     });

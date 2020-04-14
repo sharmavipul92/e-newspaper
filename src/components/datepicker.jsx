@@ -12,9 +12,8 @@ class Datepicker extends Component {
  
   render() {
     return (
-      <InputGroup className="row">
+      <InputGroup>
         <DatePicker
-          ref={(c) => this._calendar = c}
           selected={this.props.startDate}
           maxDate={new Date()}
           minDate={new Date('2020/03/29')}
@@ -23,15 +22,20 @@ class Datepicker extends Component {
           onClickOutside={() => this.handleCalendarState(false)}
           onSelect={(date, e) => this.onDateSubmit(date, e.target.value)}
           dateFormat="dd/MM/yyyy"
+          placeholderText="DD/MM/YYYY"
+          disabled={this.props.disabled}
         />
-        <InputGroup.Append onClick={() => this.handleCalendarState(true)}>
-          <InputGroup.Text>
-            <label>
-              <FaRegCalendarAlt />
-            </label>
-          </InputGroup.Text>
-        </InputGroup.Append>
+        { this.props.disabled ? (<React.Fragment></React.Fragment>) :
+          (<InputGroup.Append onClick={() => this.handleCalendarState(true)}>
+            <InputGroup.Text>
+              <label>
+                <FaRegCalendarAlt />
+              </label>
+            </InputGroup.Text>
+          </InputGroup.Append>)
+        }
       </InputGroup>
+
     );
   }
 
@@ -43,8 +47,6 @@ class Datepicker extends Component {
       this.props.handleChange(new Date(dateStr));
     } else if(typeof dateStr === 'undefined') {
       this.props.handleChange(date);
-    } else {
-
     }
   }
 
@@ -63,8 +65,6 @@ class Datepicker extends Component {
       this.setState({ isCalendarOpen: !this.state.isCalendarOpen });
     }
   }
-
-  // openDatepicker = () => this._calendar.setOpen(true);
 }
  
 export default Datepicker;
