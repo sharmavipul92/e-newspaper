@@ -14,9 +14,9 @@ class Datepicker extends Component {
     return (
       <InputGroup>
         <DatePicker
-          selected={this.props.startDate}
+          selected={new Date(this.props.startDate)}
           maxDate={new Date()}
-          minDate={new Date('2020/03/29')}
+          minDate={new Date('2020-03-29')}
           popperPlacement="bottom-end"
           open={this.state.isCalendarOpen}
           onClickOutside={() => this.handleCalendarState(false)}

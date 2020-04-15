@@ -23,17 +23,11 @@ class Pagination1 extends Component {
     return classes;
   }
 
-  parseDate() {
-    const date = this.props.startDate;
-    return `${date.getFullYear()}-${date.getMonth()+1}-${date.getDate()}`;
-  }
-
   getPaginatedList(){
-    const selectedDate = this.parseDate();
     let items = [];
     for (let number = 1; number <= this.props.numberOfPages.total; number++) {
       items.push(
-        <LinkContainer to={`/${selectedDate}/${number}`} key={number} onClick={() => this.props.handlePageChange(number)}>
+        <LinkContainer to={`/${this.props.startDate}/${number}`} key={number} onClick={() => this.props.handlePageChange(number)}>
           <Pagination.Item key={number} active={number === this.props.activePage}>
             {number}
           </Pagination.Item>

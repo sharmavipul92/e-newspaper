@@ -68,20 +68,11 @@ class Navbar1 extends Component {
 
   getFile() {
     this.setState({ isDownloading: true });
-    fetch(`/download/${this.props.date}`)
+    fetch(`http://localhost:8080/download/${this.props.date}`)
     .then(res => res.json())
     .then((response) => {
       if(response.code === 200){
-        this.setState({ link: response.link });
-
-        // const link = document.createElement('a');
-        // link.href = response.link;
-        // link.download = `seema-sandesh-${this.props.date}.pdf`;
-        // link.target = '_blank';
-        // document.body.appendChild(link);
-        // link.click();
-        // link.parentNode.removeChild(link);
-        this.setState({ isDownloading: false });
+        this.setState({ link: response.link, isDownloading: false });
       } else {
         throw new Error('file not found');
       }

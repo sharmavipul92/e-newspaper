@@ -27,16 +27,12 @@ class Newspage extends Component {
   }
 
   fetchAllPages(){
-    fetch(`/news/paper/${this.formatDate(this.props.startDate)}`)
+    fetch(`http://localhost:8080/news/paper/${this.props.startDate}`)
     .then(res => res.json())
     .then(({pages}) => {
       this.setState({ pages, loading: false });
     })
     .catch(console.log)
-  }
-
-  formatDate(date) {
-    return `${date.getFullYear()}-${date.getMonth()+1}-${date.getDate()}`;
   }
 
   render() { 
@@ -68,7 +64,7 @@ class Newspage extends Component {
                     if(!snippet.coordinates) return '';
                     let [x, y, width, height] = snippet.coordinates.split(',');
                     return (
-                      <Link target="_blank" key={snippet.id} to={`/${this.props.formatDate(this.props.startDate)}/${this.props.activePage}/${snippet.id.split('/').pop().split('.')[0]}`}>
+                      <Link target="_blank" key={snippet.id} to={`/${this.props.startDate}/${this.props.activePage}/${snippet.id.split('/').pop().split('.')[0]}`}>
                         <rect className="news" x={x+'%'} y={y+'%'} width={width+'%'} height={height+'%'} />
                       </Link>
                     );

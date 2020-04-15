@@ -17,7 +17,7 @@ class App extends Component {
     super(props);
     const hashValue = window.location.hash;
     const paths = hashValue.split(/[/#]+/).filter(Boolean);
-    const startDate = (paths[0] && !isNaN(Date.parse(paths[0]))) ? new Date(paths[0]) : new Date();
+    const startDate = (paths[0] && !isNaN(Date.parse(paths[0])) && this.isValidDate(paths[0])) ? paths[0] : this.formatDate(new Date());
     const activePage = paths[1] ? parseInt(paths[1]) : 1;
     const imageName = (paths[2] && paths[2].length > 0) ? paths[2] : undefined;
     this.state = {
@@ -41,12 +41,13 @@ class App extends Component {
         }],
       },
     }
+    this.updateRoute();
   }
 
   componentDidMount() {
     if(this.state.activePage >= this.state.numberOfPages.total || this.state.activePage < 0){
       this.setState({activePage: 1});
-      window.location.hash = `${this.formatDate(this.state.startDate)}/1`;
+      window.location.hash = `${this.state.startDate}/1`;
     }
     window.addEventListener("resize", this.resize.bind(this));
     this.resize();
@@ -56,33 +57,20 @@ class App extends Component {
     this.setState({ screen: window.innerWidth <= 770 ? 'sm' : 'md' });
   }
 
-  // render() { 
-  //   return (
-  //     <Router>
-  //       <Navbar1 />
-  //       <Container>
-  //         <div className="row">
-  //           <div className="col-md-9">
-  //             <Pagination1 numberOfPages={this.state.numberOfPages} startDate={this.state.startDate} activePage={this.state.activePage} handleChange={this.handlePageChange} />
-  //           </div>
-  //           <div className="col-md-3 my-auto">
-  //             <Datepicker startDate={this.state.startDate} handleChange={this.handleDateChange} />
-  //           </div>
-  //         </div>
-  //         <div className="row">
-  //           <Newspage startDate={this.state.startDate} activePage={this.state.activePage} />
-  //         </div>
-  //       </Container>
-  //     </Router>
-  //   );
-  // }
+  isValidDate(dateStr) {
+    let [year, month, date] = dateStr.split('-');
+    if(date && date.length === 2 && month && month.length === 2 && year && year.length === 4) {
+      return true;
+    }
+    return false;
+  }
 
   render() {
     return (
       <Router>
         <Navbar1 
           resetState={this.resetState}
-          date={(this.state.imageName) ? this.getImageIdFromName() : this.formatDate(this.state.startDate)}
+          date={(this.state.imageName) ? this.getImageIdFromName() : this.state.startDate}
           screen={this.state.screen}
         />
         { this.getContents() }
@@ -91,7 +79,7 @@ class App extends Component {
   }
 
   getImageIdFromName(){
-    let name = `${this.formatDate(this.state.startDate)}-${this.state.activePage}-${this.state.imageName}`;
+    let name = `${this.state.startDate}-${this.state.activePage}-${this.state.imageName}`;
     return name;
   }
 
@@ -139,7 +127,6 @@ class App extends Component {
             startDate={this.state.startDate}
             activePage={this.state.activePage}
             onCarouselPageChange={this.onCarouselPageChange}
-            formatDate={this.formatDate}
           />
         </Container>
       );
@@ -156,7 +143,7 @@ class App extends Component {
   handleDateChange = date => {
     // console.log(date);
     this.setState({
-      startDate: date,
+      startDate: this.formatDate(date),
       activePage: 1,
     }, () => {
       this.updateRoute();
@@ -172,18 +159,27 @@ class App extends Component {
 
   resetState = () => {
     this.setState({
-      startDate: new Date(),
+      startDate: this.formatDate(new Date()),
       activePage: 1,
       imageName: undefined,
     });
   }
 
   updateRoute() {
-    window.location.hash = `${this.formatDate(this.state.startDate)}/${this.state.activePage}`;
+    window.location.hash = `${this.state.startDate}/${this.state.activePage}`;
   }
 
-  formatDate(date) {
-    return `${date.getFullYear()}-${date.getMonth()+1}-${date.getDate()}`;
+  formatDate(d) {
+    let month = '' + (d.getMonth() + 1),
+        day = '' + d.getDate(),
+        year = d.getFullYear();
+  
+    if (month.length < 2) 
+        month = '0' + month;
+    if (day.length < 2) 
+        day = '0' + day;
+  
+    return [year, month, day].join('-');
   }
 
 }
