@@ -27,7 +27,7 @@ class Newspage extends Component {
   }
 
   fetchAllPages(){
-    fetch(`http://localhost:8080/news/paper/${this.props.startDate}`)
+    fetch(`/news/paper/${this.props.startDate}`)
     .then(res => res.json())
     .then(({pages}) => {
       this.setState({ pages, loading: false });

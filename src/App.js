@@ -7,7 +7,6 @@ import Sharing from './components/sharing';
 import Newspage from './components/news-page';
 import { Container } from 'react-bootstrap';
 import Datepicker from './components/datepicker';
-// import CustomPagination from "./components/custom-pagination";
 import { HashRouter as Router } from "react-router-dom";
 import "react-responsive-carousel/lib/styles/carousel.min.css";
 
@@ -19,7 +18,7 @@ class App extends Component {
     const paths = hashValue.split(/[/#]+/).filter(Boolean);
     const startDate = (paths[0] && !isNaN(Date.parse(paths[0])) && this.isValidDate(paths[0])) ? paths[0] : this.formatDate(new Date());
     const activePage = paths[1] ? parseInt(paths[1]) : 1;
-    const imageName = (paths[2] && paths[2].length > 0) ? paths[2] : undefined;
+    const imageName = (paths[2] && paths[2].length > 0) ? paths[2] : '';
     this.state = {
       startDate,
       activePage,
@@ -166,7 +165,7 @@ class App extends Component {
   }
 
   updateRoute() {
-    window.location.hash = `${this.state.startDate}/${this.state.activePage}`;
+    window.location.hash = `${this.state.startDate}/${this.state.activePage}/${this.state.imageName}`;
   }
 
   formatDate(d) {

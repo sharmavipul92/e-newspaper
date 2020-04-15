@@ -7,7 +7,7 @@ class SingleNews extends Component {
   }
 
   componentDidMount() {
-    fetch(`http://localhost:8080/news/${this.props.imageName}`)
+    fetch(`/news/${this.props.imageName}`)
     .then(res => res.json())
     .then(({newsLink}) => {
       this.setState({ newsLink });
