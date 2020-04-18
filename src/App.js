@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import './css/App.css';
 import Navbar1 from './components/navbar';
-import Pagination1 from './components/pagination';
+import PaginationList from './components/pagination-list';
 import SingleNews from './components/single-news';
 import Sharing from './components/sharing';
 import Newspage from './components/news-page';
@@ -44,9 +44,8 @@ class App extends Component {
   }
 
   componentDidMount() {
-    if(this.state.activePage >= this.state.numberOfPages.total || this.state.activePage < 0){
-      this.setState({activePage: 1});
-      window.location.hash = `${this.state.startDate}/1`;
+    if(this.state.activePage > this.state.numberOfPages.total || this.state.activePage < 0){
+      this.setState({activePage: 1}, this.updateRoute);
     }
     window.addEventListener("resize", this.resize.bind(this));
     this.resize();
@@ -105,7 +104,7 @@ class App extends Component {
       return (
         <Container>
           <div className="news-header">
-            <Pagination1
+            <PaginationList 
               activePage={this.state.activePage}
               handlePageChange={this.handlePageChange}
               numberOfPages={this.state.numberOfPages}
@@ -134,9 +133,7 @@ class App extends Component {
 
   onCarouselPageChange = (page) => {
     // console.log(page);
-    this.setState({ activePage: page+1 }, () => {
-      this.updateRoute();
-    });
+    this.setState({ activePage: page+1 }, this.updateRoute);
   }
 
   handleDateChange = date => {

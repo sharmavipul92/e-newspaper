@@ -48,7 +48,7 @@ class Newspage extends Component {
         showIndicators={false}
         showStatus={false}
         selectedItem={this.props.activePage-1}
-        swipeScrollTolerance={10}
+        swipeScrollTolerance={100}
         onChange={(e) => this.props.onCarouselPageChange(e)}
       >
       {
