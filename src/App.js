@@ -155,12 +155,12 @@ class App extends Component {
 
   fetchAllPages(){
     this.setState({ loadingPages: true });
-    let headers = new Headers();
-    let str = process.env.AUTH_USERNAME + "sharmavipul92:Infinity92" + process.env.AUTH_PASSWORD;
-    const authString = Buffer.from(str).toString('base64');
-    console.log(str, authString, process.env);
-    headers.append('Authorization', 'Basic ' + authString);
-    fetch(`http://localhost:8080/news/paper/${this.state.startDate}`, { method: 'GET', headers })
+    // let headers = new Headers();
+    // let str = process.env.AUTH_USERNAME + "sharmavipul92:Infinity92" + process.env.AUTH_PASSWORD;
+    // const authString = Buffer.from(str).toString('base64');
+    // console.log(str, authString, process.env);
+    // headers.append('Authorization', 'Basic ' + authString);
+    fetch(`/news/paper/${this.state.startDate}`)
     .then(res => res.json())
     .then(({pages}) => {
       this.setState({ pages, loadingPages: false, numberOfPages: Object.keys(pages).length }, () => {
