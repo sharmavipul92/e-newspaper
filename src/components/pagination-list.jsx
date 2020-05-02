@@ -6,7 +6,7 @@ class PaginationList extends Component {
   render() { 
     return (
       <Form.Group className="my-auto">
-        <Form.Control as="select" size={this.props.screen === 'sm' ? 'sm' : ''} value={this.props.activePage} onChange={(e) => this.props.handlePageChange(e.target.value)} custom>
+        <Form.Control disabled={this.props.disabled} as="select" size={this.props.screen === 'sm' ? 'sm' : ''} value={this.props.activePage} onChange={(e) => this.props.handlePageChange(e.target.value)} custom>
           {this.getPaginatedList()}
         </Form.Control>
       </Form.Group>
@@ -15,7 +15,7 @@ class PaginationList extends Component {
 
   getPaginatedList(){
     let items = [];
-    for (let number = 1; number <= this.props.numberOfPages.total; number++) {
+    for (let number = 1; number <= this.props.numberOfPages; number++) {
       items.push(
         <option key={number} value={number}>
           Page {number}

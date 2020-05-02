@@ -25,17 +25,14 @@ class Datepicker extends Component {
           placeholderText="DD/MM/YYYY"
           disabled={this.props.disabled}
         />
-        { this.props.disabled ? (<React.Fragment></React.Fragment>) :
-          (<InputGroup.Append onClick={() => this.handleCalendarState(true)}>
-            <InputGroup.Text>
-              <label>
-                <FaRegCalendarAlt />
-              </label>
-            </InputGroup.Text>
-          </InputGroup.Append>)
-        }
+        <InputGroup.Append style={this.props.disabled ? {pointerEvents: "none"} : {}} onClick={() => this.handleCalendarState(true)}>
+          <InputGroup.Text>
+            <label>
+              <FaRegCalendarAlt />
+            </label>
+          </InputGroup.Text>
+        </InputGroup.Append>
       </InputGroup>
-
     );
   }
 

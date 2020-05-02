@@ -4,41 +4,11 @@ import { Carousel } from "react-responsive-carousel";
 import { Link } from 'react-router-dom';
 
 class Newspage extends Component {
-  state = {
-    loading: true,
-    pages: {}
-  }
-
-  constructor(props) {
-    super(props);
-    this.myRef = React.createRef();
-  }
-
-  componentDidMount() {
-    this.fetchAllPages();
-  }
-
-  componentDidUpdate(prevProps) {
-    if (prevProps.startDate !== this.props.startDate) {
-      this.setState({ loading: true, pages:{} });
-      this.myRef = React.createRef();
-      this.fetchAllPages();
-    }
-  }
-
-  fetchAllPages(){
-    fetch(`/news/paper/${this.props.startDate}`)
-    .then(res => res.json())
-    .then(({pages}) => {
-      this.setState({ pages, loading: false });
-    })
-    .catch(console.log)
-  }
 
   render() { 
-    if(this.state.loading) {
+    if(this.props.loading) {
       return <div>loading...</div>;
-    } else if(!this.state.pages || !this.state.pages[this.props.activePage] || !this.state.pages[this.props.activePage].mainPage) {
+    } else if(!this.props.pages || !this.props.pages[this.props.activePage] || !this.props.pages[this.props.activePage].mainPage) {
       return <div>Some problem in fetching the page.</div>;
     }
 
@@ -52,15 +22,15 @@ class Newspage extends Component {
         onChange={(e) => this.props.onCarouselPageChange(e)}
       >
       {
-        Object.keys(this.state.pages).map(page => {
+        Object.keys(this.props.pages).map(page => {
           return (
             <div key={page}>
               <svg version="1.1" xmlns="http://www.w3.org/2000/svg" xmlnsXlink="http://www.w3.org/1999/xlink"
                 viewBox="0 0 1142 1800" preserveAspectRatio="xMinYMin meet">
-                <image width="1142" height="1800" xlinkHref={this.state.pages[page].mainPage}>
+                <image width="1142" height="1800" xlinkHref={this.props.pages[page].mainPage}>
                 </image>
                 {
-                  this.state.pages[page].news.map(snippet => {
+                  this.props.pages[page].news.map(snippet => {
                     if(!snippet.coordinates) return '';
                     let [x, y, width, height] = snippet.coordinates.split(',');
                     return (

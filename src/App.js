@@ -23,32 +23,16 @@ class App extends Component {
       startDate,
       activePage,
       imageName,
-      numberOfPages: {
-        total: 8,
-        categories: [{
-          name: "National",
-          pages: [1,2]
-        },{
-          name: "Ganganagar",
-          pages: [3,4]
-        },{
-          name: "Jaipur",
-          pages: [5,6]
-        },{
-          name: "National",
-          pages: [7,8]
-        }],
-      },
+      loadingPages: true,
+      numberOfPages: 0,
     }
     this.updateRoute();
   }
 
   componentDidMount() {
-    if(this.state.activePage > this.state.numberOfPages.total || this.state.activePage < 0){
-      this.setState({activePage: 1}, this.updateRoute);
-    }
     window.addEventListener("resize", this.resize.bind(this));
     this.resize();
+    this.fetchAllPages();
   }
 
   resize() {
@@ -71,7 +55,29 @@ class App extends Component {
           date={(this.state.imageName) ? this.getImageIdFromName() : this.state.startDate}
           screen={this.state.screen}
         />
-        { this.getContents() }
+        <Container>
+          <div className="news-header">
+            <PaginationList 
+              activePage={this.state.activePage}
+              handlePageChange={this.handlePageChange}
+              numberOfPages={this.state.numberOfPages}
+              startDate={this.state.startDate}
+              screen={this.state.screen}
+              disabled={this.state.imageName ? true : false }
+            />
+            <Datepicker
+              startDate={this.state.startDate}
+              handleChange={this.handleDateChange}
+              screen={this.state.screen}
+              disabled={this.state.imageName ? true : false }
+            />
+            <Sharing
+              imageLink={window.location.href} 
+              screen={this.state.screen} 
+            />
+          </div>
+          { this.getContents() }
+        </Container>
       </Router>
     );
   }
@@ -84,49 +90,17 @@ class App extends Component {
   getContents(){
     if(this.state.imageName) {
       return (
-        <Container>
-          <div className="news-header">
-            <Datepicker
-              startDate={this.state.startDate}
-              handleChange={this.handleDateChange}
-              screen={this.state.screen}
-              disabled={true}
-            />
-            <Sharing
-              imageLink={window.location.href} 
-              screen={this.state.screen} 
-            />
-          </div>
-          <SingleNews imageName={this.getImageIdFromName()} />
-        </Container>
+        <SingleNews imageName={this.getImageIdFromName()} />
       );
     } else {
       return (
-        <Container>
-          <div className="news-header">
-            <PaginationList 
-              activePage={this.state.activePage}
-              handlePageChange={this.handlePageChange}
-              numberOfPages={this.state.numberOfPages}
-              startDate={this.state.startDate}
-              screen={this.state.screen}
-            />
-            <Datepicker
-              startDate={this.state.startDate}
-              handleChange={this.handleDateChange}
-              screen={this.state.screen}
-            />
-            <Sharing
-              imageLink={window.location.href} 
-              screen={this.state.screen} 
-            />
-          </div>
-          <Newspage
-            startDate={this.state.startDate}
-            activePage={this.state.activePage}
-            onCarouselPageChange={this.onCarouselPageChange}
-          />
-        </Container>
+        <Newspage
+          startDate={this.state.startDate}
+          activePage={this.state.activePage}
+          onCarouselPageChange={this.onCarouselPageChange}
+          pages={this.state.pages}
+          loading={this.state.loadingPages}
+        />
       );
     }
   }
@@ -142,6 +116,7 @@ class App extends Component {
       startDate: this.formatDate(date),
       activePage: 1,
     }, () => {
+      this.fetchAllPages();
       this.updateRoute();
     });
   };
@@ -176,6 +151,32 @@ class App extends Component {
         day = '0' + day;
   
     return [year, month, day].join('-');
+  }
+
+  fetchAllPages(){
+    this.setState({ loadingPages: true });
+    let headers = new Headers();
+    let str = process.env.AUTH_USERNAME + "sharmavipul92:Infinity92" + process.env.AUTH_PASSWORD;
+    const authString = Buffer.from(str).toString('base64');
+    console.log(str, authString, process.env);
+    headers.append('Authorization', 'Basic ' + authString);
+    fetch(`http://localhost:8080/news/paper/${this.state.startDate}`, { method: 'GET', headers })
+    .then(res => res.json())
+    .then(({pages}) => {
+      this.setState({ pages, loadingPages: false, numberOfPages: Object.keys(pages).length }, () => {
+        this.checkValidPageNumber();
+      });
+    })
+    .catch(console.log)
+    .finally(() => {
+      this.setState({ loadingPages: false });
+    })
+  }
+
+  checkValidPageNumber() {
+    if(this.state.activePage > this.state.numberOfPages || this.state.activePage < 0){
+      this.setState({activePage: 1}, this.updateRoute);
+    }
   }
 
 }
