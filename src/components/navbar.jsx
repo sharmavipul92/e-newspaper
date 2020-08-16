@@ -68,7 +68,7 @@ class Navbar1 extends Component {
 
   getFile() {
     this.setState({ isDownloading: true });
-    fetch(`/download/${this.props.date}`)
+    fetch(`https://seema-sandesh.appspot.com/download/${this.props.date}`)
     .then(res => res.json())
     .then((response) => {
       if(response.code === 200){

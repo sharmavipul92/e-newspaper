@@ -15,6 +15,7 @@ class App extends Component {
   constructor(props) {
     super(props);
     const hashValue = window.location.hash;
+    console.log(hashValue);
     const paths = hashValue.split(/[/#]+/).filter(Boolean);
     const startDate = (paths[0] && !isNaN(Date.parse(paths[0])) && this.isValidDate(paths[0])) ? paths[0] : this.formatDate(new Date());
     const activePage = paths[1] ? parseInt(paths[1]) : 1;
@@ -160,9 +161,10 @@ class App extends Component {
     // const authString = Buffer.from(str).toString('base64');
     // console.log(str, authString, process.env);
     // headers.append('Authorization', 'Basic ' + authString);
-    fetch(`/news/paper/${this.state.startDate}`)
+    fetch(`https://seema-sandesh.appspot.com/news/paper/${this.state.startDate}`)
     .then(res => res.json())
     .then(({pages}) => {
+      console.log(Object.keys(pages).length);
       this.setState({ pages, loadingPages: false, numberOfPages: Object.keys(pages).length }, () => {
         this.checkValidPageNumber();
       });

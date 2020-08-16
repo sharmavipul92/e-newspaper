@@ -9,7 +9,7 @@ class Newspage extends Component {
     if(this.props.loading) {
       return <div>loading...</div>;
     } else if(!this.props.pages || !this.props.pages[this.props.activePage] || !this.props.pages[this.props.activePage].mainPage) {
-      return <div>Some problem in fetching the page.</div>;
+      return <div>The paper has not been uploaded yet. Please come back after sometime.</div>;
     }
 
     return (
